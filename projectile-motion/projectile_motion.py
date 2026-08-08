@@ -30,4 +30,4 @@ def final_pos(initial_speed, angle, height):
     print(f'Horizontal Displacement: {pos[0]}\nTime: {t}\nFinal Speed {np.linalg.norm(v)}\nMax Height: {Ymax}')
     return [pos[0], t, np.linalg.norm(v), Ymax] #update bs in return statemenet
 print(final_pos(initial_speed = 10, height = 0, angle = 45))
- #test
+ #test 123
