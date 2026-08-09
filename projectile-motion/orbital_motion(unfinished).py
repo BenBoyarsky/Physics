@@ -2,7 +2,7 @@
 #potential updates: user doesn't start from a fixed location; 3D coordinates instead of 2D;
 #                   add atmosphere; user may select planets instead of inputting their own parameters;
 #                   figure out system for dealing with infinite loops (i.e. user cannot exceed escape v)
-#                   units; calculate periapsis and other relevant stats during orbit;
+#                   units; calculate periapsis and other relevant stats during orbit; add visualizer;
 #                   make final_pos() only return, and main() will print;
 
 import numpy as np
