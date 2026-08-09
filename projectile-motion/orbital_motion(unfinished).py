@@ -13,9 +13,10 @@ def main():
     R = float(input('Planet Radius: '))
     M = float(input('Planet Mass: '))
     m = float(input('Object Mass: '))
-    v = float(input('Initial Speed: '))
+    v = float(input('Launch Speed: '))
+    angle = float(input('Launch Angle: '))
     h = float(input('Initial Height: '))
-    final_pos(R, M, m, v, h)
+    final_pos(R, M, m, v, angle, h)
 
 if __name__ == '__main__':
     main()
