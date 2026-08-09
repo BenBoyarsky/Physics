@@ -1,5 +1,8 @@
 #projecile motion on flat ground with numerical methods
 #potential updates: return final velocity vector; return final angle; calculate g based on height, not fixed;
+#                   add aerodynamics assuming a spherical object; add multiple types of objects (This has to
+#                   be a different update because effective surface area changes with an objects angle in the air);
+#                   3D instead of 2D;
 
 import numpy as np
 import sys
