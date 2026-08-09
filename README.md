@@ -1,10 +1,11 @@
 # Physics
 
-Simulations and problem-solving code from my physics work.
+Code for physics simulations.
 
 ## What's here
 
-- **projectile-motion/** — Numerical simulation of projectile motion 
+- **projectile_motion/** — Numerical simulation of projectile motion on flat ground
+- **orbital_motion(unfinished)/** - Numerical simulation of orbital motion
 
 ## Requirements
 
