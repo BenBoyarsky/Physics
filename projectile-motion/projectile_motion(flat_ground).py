@@ -3,15 +3,16 @@
 #                   add aerodynamics assuming a spherical object; add multiple types of objects (This has to
 #                   be a different update because effective surface area changes with an objects angle in the air);
 #                   3D instead of 2D; units; make final_pos() only return, and main() will print; add visualizer;
-#                   Custom vs given variables for aerodynamics; Variable g; ensure correct parameters are given;
-#                   Default values so you dont have to input aerodynamic variables;
+#                   Variable g; ensure correct parameters are given; Have different methods for different levels of
+#                   customization. i.e. have a simple kinematics simulation, one that has variable g, one with aerodynamics, etc
+#                   Default values so you dont have to input aerodynamic variables; variable tstep; instead of
+#                   raising errors, have the user enter another valid answer;
 
 
 
 import numpy as np
 import sys
 
-#surface area is based on projected area **AERODYNAMICS NOT WORKING**
 def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
     angle = np.deg2rad(angle)
     if height < 0: 
@@ -44,18 +45,19 @@ def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
             Fd = K * np.linalg.norm(v) * v
             F = Fg + Fd
             a = F / m
-            v = F * tstep
+            v += a * tstep
             t += tstep
             if pos[1] > Ymax:
                 Ymax = pos[1]
                 tmax = t
 
     if __name__ == '__main__':
-        print(f'Horizontal Displacement: {pos[0]},\nTime: {t}\nFinal Speed {np.linalg.norm(v)}\nMax Height: {Ymax}\nTime to Max: {tmax}')
+        print(f'Horizontal Displacement: {pos[0]}\nTime: {t}\nFinal Speed {np.linalg.norm(v)}\nMax Height: {Ymax}\nTime to Max: {tmax}')
     else:
         return [pos[0], t, np.linalg.norm(v), Ymax, tmax]
 
-def main():
+def main(i):
+    print(f'--- Simulation {i} ---')
     h = float(input('Initial Height (m): '))
     angle = float(input('Initial Angle (deg): '))
     speed = float(input('Initial Speed (m/s): '))
@@ -68,15 +70,14 @@ def main():
         raise ValueError("Must enter 'Y' or 'N'")
     if aerodynamics:
         m = float(input('Object Mass (kg): '))
+        r = float(input('Radius (cm): '))
         custom = input('Custom Aerodynamics (Y/N): ')
         if custom == 'Y':
             Cd = float(input('Coefficient of Drag (Based on Projected Area): '))
             p = float(input('Air Density (kg/m^3): '))
-            r = float(input('Radius (cm): '))
         elif custom == 'N':
             Cd = 0.47
             p = 1.13 #LA in the summer
-            r = float(input('Radius (cm): '))
         else:
             raise ValueError("Must enter 'Y' or 'N'")
     else:
@@ -86,6 +87,14 @@ def main():
         r = 0
         
     final_pos(speed, angle, h, aerodynamics, m, Cd, p , r / 100)
+    repeat = input('Run Another Simulation (Y/N): ')
+    if repeat == 'Y':
+        print('\n')
+        main(i+1)
+    elif repeat == 'N':
+        print('Quit Program.')
+    else:
+        raise ValueError("Must enter 'Y' or 'N'")
 
 if __name__ == '__main__':
-    main()
+    main(1)
