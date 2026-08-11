@@ -14,15 +14,15 @@ import numpy as np
 import sys
 
 def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
-    angle = np.deg2rad(angle) % (2 * np.pi)
     if initial_speed < 0:
         angle += np.pi
+    if height == 0:
+            height = sys.float_info.min
     errors = ''
     if height < 0: 
         errors += 'Height cannot be negative.\n'
-    if not height > sys.float_info.min:
-        if (angle >= np.pi) | (angle <= 0):
-            errors += 'Angle must be between 0 to 180 degrees, exclusive.\n'
+    if not height > sys.float_info.min and (angle >= np.pi) | (angle <= 0):
+        errors += 'Angle must be between 0 to 180 degrees, exclusive.\n'
     if not isinstance(aerodynamics, bool):
         errors += "Aerodynamics must be 'True' or 'False'.\n"
     if m < 0:
@@ -37,8 +37,6 @@ def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
         raise ValueError(errors)
     v = np.array([initial_speed * np.cos(angle), initial_speed * np.sin(angle)])
     g = np.array([0, -9.80665])
-    if height == 0:
-        height = sys.float_info.min
     pos = np.array([0., height])
     tstep = 0.0001
     t = 0
@@ -73,28 +71,69 @@ def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
 
 def main(i):
     print(f'--- Simulation {i} ---')
-    h = float(input('Initial Height (m): '))
-    angle = float(input('Initial Angle (deg): '))
+    while True:
+        h = float(input('Initial Height (m): '))
+        if h >= 0:
+            break
+        else:
+            print('Height must be positive.')
+    while True:
+        angle = float(input('Initial Angle (deg): '))
+        angle = np.deg2rad(angle) % (2 * np.pi)
+        if not h > sys.float_info.min and (angle >= np.pi) | (angle <= 0):
+                print('Angle must be between 0 to 180 degrees, exclusive.')
+        else:
+            break
     speed = float(input('Initial Speed (m/s): '))
-    aerodynamics = input('Aerodynamics using a Sphere (Y/N): ')
-    if aerodynamics == 'Y':
-        aerodynamics = True
-    elif aerodynamics == 'N':
-        aerodynamics = False
-    else:
-        raise ValueError("Must enter 'Y' or 'N'")
+    while True:
+        aerodynamics = input('Aerodynamics using a Sphere (Y/N): ')
+        if aerodynamics == 'Y':
+            aerodynamics = True
+            break
+        elif aerodynamics == 'N':
+            aerodynamics = False
+            break
+        else:
+            print("Must enter 'Y' or 'N'.")
     if aerodynamics:
-        m = float(input('Object Mass (kg): '))
-        r = float(input('Radius (cm): '))
-        custom = input('Custom Aerodynamics (Y/N): ')
-        if custom == 'Y':
-            Cd = float(input('Coefficient of Drag (Based on Projected Area): '))
-            p = float(input('Air Density (kg/m^3): '))
-        elif custom == 'N':
+        while True:
+            m = float(input('Object Mass (kg): '))
+            if m > 0:
+                break
+            else:
+                print('Object mass must be positive.')
+        while True:
+            r = float(input('Radius (cm): '))
+            if r > 0:
+                break
+            else:
+                print('Radius must be positive.')
+        while True:
+            custom = input('Custom Aerodynamics (Y/N): ')
+            if custom == 'Y':
+                custom = True
+                break
+            elif custom == 'N':
+                custom = False
+                break
+            else:
+                print("Must enter 'Y' or 'N'.")
+        if custom:
+            while True:
+                Cd = float(input('Coefficient of Drag (Based on Projected Area): '))
+                if Cd > 0:
+                    break
+                else:
+                    print('Coefficient of drag must be positive.')
+            while True:
+                p = float(input('Air Density (kg/m^3): '))
+                if p > 0:
+                    break
+                else:
+                    print('Air Density must be positive.')
+        else:
             Cd = 0.47
             p = 1.13 #LA in the summer
-        else:
-            raise ValueError("Must enter 'Y' or 'N'")
     else:
         m = 0
         Cd = 0
@@ -102,14 +141,22 @@ def main(i):
         r = 0
         
     final_pos(speed, angle, h, aerodynamics, m, Cd, p , r / 100)
-    repeat = input('Run Another Simulation (Y/N): ')
-    if repeat == 'Y':
-        print('\n')
+    while True:
+        repeat = input('Run Another Simulation (Y/N): ')
+        if repeat == 'Y':
+            repeat = True
+            break
+        elif repeat == 'N':
+            repeat = False
+            break
+        else:
+            print("Must enter 'Y' or 'N'.")
+
+    if repeat:
+        print()
         main(i+1)
-    elif repeat == 'N':
-        print('Quit Program.')
     else:
-        raise ValueError("Must enter 'Y' or 'N'")
+        print('Quit Program.')
 
 if __name__ == '__main__':
     main(1)
