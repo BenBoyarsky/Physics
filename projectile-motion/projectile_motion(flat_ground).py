@@ -1,12 +1,12 @@
 #projecile motion on flat ground with numerical methods
 #potential updates: return final velocity vector; return final angle; calculate g based on height, not fixed;
-#                   add aerodynamics assuming a spherical object; add multiple types of objects (This has to
-#                   be a different update because effective surface area changes with an objects angle in the air);
-#                   3D instead of 2D; units; make final_pos() only return, and main() will print; add visualizer;
+#                   add multiple types of objects (This has to be a different update because effective surface area 
+#                   changes with an objects angle in the air);
+#                   Option for 3D; units;add visualizer;
 #                   Variable g; ensure correct parameters are given; Have different methods for different levels of
 #                   customization. i.e. have a simple kinematics simulation, one that has variable g, one with aerodynamics, etc
-#                   Default values so you dont have to input aerodynamic variables; variable tstep; instead of
-#                   raising errors, have the user enter another valid answer;
+#                   variable tstep; 
+#                   instead of raising errors, have the user enter another valid answer;
 
 
 
@@ -14,12 +14,27 @@ import numpy as np
 import sys
 
 def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
-    angle = np.deg2rad(angle)
+    angle = np.deg2rad(angle) % (2 * np.pi)
+    if initial_speed < 0:
+        angle += np.pi
+    errors = ''
     if height < 0: 
-        raise ValueError('Height cannot be negative.')
+        errors += 'Height cannot be negative.\n'
     if not height > sys.float_info.min:
         if (angle >= np.pi) | (angle <= 0):
-            raise ValueError('Angle must be between 0 to 180 degrees, exclusive.')
+            errors += 'Angle must be between 0 to 180 degrees, exclusive.\n'
+    if not isinstance(aerodynamics, bool):
+        errors += "Aerodynamics must be 'True' or 'False'.\n"
+    if m < 0:
+        errors += 'Object mass cannot be negative.\n'
+    if Cd < 0:
+        errors += 'Coefficient of drag cannot be negative.\n'
+    if p < 0:
+        errors += 'Density cannot be negative.\n'
+    if r < 0:
+        errors += 'Radius cannot be negative.\n'
+    if errors:
+        raise ValueError(errors)
     v = np.array([initial_speed * np.cos(angle), initial_speed * np.sin(angle)])
     g = np.array([0, -9.80665])
     if height == 0:
