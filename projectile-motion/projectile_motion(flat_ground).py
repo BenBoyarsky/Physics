@@ -5,12 +5,12 @@
 #                   Option for 3D; units;add visualizer;
 #                   Variable g; ensure correct parameters are given; Have different methods for different levels of
 #                   customization. i.e. have a simple kinematics simulation, one that has variable g, one with aerodynamics, etc
-#                   variable tstep; 
-#                   instead of raising errors, have the user enter another valid answer;
+#                   variable tstep; ask user which graphs they want after each sim
 
 
 
 import numpy as np
+import matplotlib.pyplot as plt
 import sys
 
 def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
@@ -42,11 +42,17 @@ def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
     t = 0
     Ymax = height
     tmax = 0
+    t_arr = []
+    x_arr = []
+    y_arr = []
     if not aerodynamics:
         while pos[1] > 0:
             pos += v * tstep
             v += g * tstep
             t += tstep
+            t_arr.append(t)
+            x_arr.append(t)
+            y_arr.append(pos[1])
             if pos[1] > Ymax:
                 Ymax = pos[1]
                 tmax = t
@@ -60,6 +66,9 @@ def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
             a = F / m
             v += a * tstep
             t += tstep
+            t_arr.append(t)
+            x_arr.append(t)
+            y_arr.append(pos[1])
             if pos[1] > Ymax:
                 Ymax = pos[1]
                 tmax = t
