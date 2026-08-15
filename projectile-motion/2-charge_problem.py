@@ -2,6 +2,7 @@
 
 import numpy as np
 import matplotlib as plt
+import ast
 
 k = 8.99e9
 class charge:
@@ -24,8 +25,6 @@ class charge:
         F = -((k * self.charge * other_charge.charge) / (np.linalg.norm(r) ** 3)) * r
         return F
 
-
-
 def simulate(charges, t):
     tstep = 0.001
     n = int(t / tstep)
@@ -38,15 +37,21 @@ def simulate(charges, t):
         for i in range(len(charges)):
             charges[i].update_pos(tstep)
             charges[i].update_velocity(tstep, F[i])
-        
-            
-        
-        
-                
 
+def charge_creator(n):
+    charges = []
+    for i in range(n):
+        print(f'--- Charge {i + 1} ---')
+        m = float(input('Mass: '))
+        q = float(input('Charge: '))
+        pos = np.array(ast.literal_eval(input('Position [x, y]: ')))
+        print()
+        charges.append(charge(m, q, pos))
+    return charges
 
 def main():
-    pass
+    n = int(input('Number of Charges: '))
+    charge_creator(n)
 
 if __name__ == '__main__':
     main()
