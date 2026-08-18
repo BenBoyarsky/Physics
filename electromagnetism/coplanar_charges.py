@@ -1,7 +1,8 @@
-#n-charge problem
+#coplanar_charges (unfinished)
 
 #update: Change charge name to something else, and fix all the places that mentions it;
-#        Checker for well-formed codes
+#        Checker for well-formed codes; allow user to input a charge at a position and
+#        visualize its path
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,7 +29,7 @@ class charge:
         F = -((k * self.charge * other_charge.charge) / (np.linalg.norm(r) ** 3)) * r
         return F
 
-def simulate(charges, t): #unfinished
+def n_body_problem(charges, t): #unfinished
     plt.ion()
     tstep = 0.001
     n = int(t / tstep)
@@ -42,7 +43,24 @@ def simulate(charges, t): #unfinished
             charges[i].update_pos(tstep)
             charges[i].update_velocity(tstep, F[i])
 
-def Efield(charges):
+def simulate(test_charge, charges, time):
+    tstep = 0.001
+    n = int(time / tstep)
+    for _ in range(n):
+        test_charge.pos += test_charge.velocity * tstep
+        F = test_charge.charge * Efield(test_charge.pos, charges)
+        test_charge.update_velocity(tstep, F)
+
+def Efield(pos, charges):
+    vector = np.zeros(2)
+    for point_charge in charges:
+        r = pos - point_charge.pos
+        vector[0] += ((k * point_charge.charge) / np.linalg.norm(r) ** 2) * (r[0] / np.linalg.norm(r))
+        vector[1] += ((k * point_charge.charge) / np.linalg.norm(r) ** 2) * (r[1] / np.linalg.norm(r))
+    return vector
+
+
+def EfieldGraph(charges):
     Xmax = charges[0].pos[0]
     Xmin = charges[0].pos[0]
     Ymax = charges[0].pos[1]
@@ -67,7 +85,7 @@ def Efield(charges):
     Xbounds = [Xmin - 0.3*max, Xmax + 0.3*max]
     Ybounds = [Ymin - 0.3*max, Ymax + 0.3*max]
 
-    n = 15
+    n = 30
     x = np.linspace(Xbounds[0], Xbounds[1], n)
     y = np.linspace(Ybounds[0], Ybounds[1], n)
     X, Y = np.meshgrid(x, y)
@@ -147,18 +165,19 @@ def decipher(code):
         charges.append(charge(m[i], q[i], pos[i]))
     return charges
 
+
 def main():
     code = input('Do you have a code? (Y/N): ')
     if code == 'Y':
         line = input('Code: ')
         charges = decipher(line)
-        Efield(charges)
+        EfieldGraph(charges)
 
 
     elif code == 'N':
         n = int(input('Number of Charges: '))
         charges = charge_creator(n)
-        Efield(charges)
+        EfieldGraph(charges)
 
 if __name__ == '__main__':
     main()

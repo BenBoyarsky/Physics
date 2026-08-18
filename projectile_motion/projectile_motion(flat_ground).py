@@ -2,7 +2,7 @@
 #potential updates: return final velocity vector; return final angle; calculate g based on height, not fixed;
 #                   add multiple types of objects (This has to be a different update because effective surface area 
 #                   changes with an objects angle in the air);
-#                   Option for 3D; units;add visualizer;
+#                   Option for 3D;
 #                   Variable g; ensure correct parameters are given; Have different methods for different levels of
 #                   customization. i.e. have a simple kinematics simulation, one that has variable g, one with aerodynamics, etc
 #                   variable tstep; ask user which graphs they want after each sim
@@ -74,7 +74,7 @@ def final_pos(initial_speed, angle, height, aerodynamics, m, Cd, p, r):
                 tmax = t
 
     if __name__ == '__main__':
-        print(f'Horizontal Displacement: {pos[0]}\nTime: {t}\nFinal Speed {np.linalg.norm(v)}\nMax Height: {Ymax}\nTime to Max: {tmax}')
+        print(f'Horizontal Displacement (m): {pos[0]}\nTime (s): {t}\nFinal Speed (m/s): {np.linalg.norm(v)}\nMax Height (m): {Ymax}\nTime to Max (s): {tmax}')
     else:
         return [pos[0], t, np.linalg.norm(v), Ymax, tmax]
 
