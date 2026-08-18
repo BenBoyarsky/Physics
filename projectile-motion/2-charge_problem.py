@@ -67,7 +67,7 @@ def Efield(charges):
     Xbounds = [Xmin - 0.3*max, Xmax + 0.3*max]
     Ybounds = [Ymin - 0.3*max, Ymax + 0.3*max]
 
-    n = 40
+    n = 15
     x = np.linspace(Xbounds[0], Xbounds[1], n)
     y = np.linspace(Ybounds[0], Ybounds[1], n)
     X, Y = np.meshgrid(x, y)
@@ -138,7 +138,7 @@ def decipher(code):
     m = []
     q = []
     pos = []
-    while len(line) >= 0:
+    while len(line) > 0:
         pos.append(ast.literal_eval(line.pop()))
         q.append(float(line.pop()))
         m.append(float(line.pop()))
