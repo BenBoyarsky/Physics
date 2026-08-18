@@ -6,7 +6,7 @@ Code for physics simulations.
 
 - **projectile_motion(flat_ground)/** — Numerical simulation of projectile motion on flat ground
 - **orbital_motion/** - Numerical simulation of orbital motion
-- **planar_charges/** - Point charges on a plane; provides relevant information i.e. electric field
+- **coplanar_charges/** - Point charges on a plane; provides relevant information i.e. electric field
 
 ## Requirements
 
