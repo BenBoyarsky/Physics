@@ -1,3 +1,5 @@
+#2d
+
 import numpy as np
 import matplotlib as plt
 
@@ -44,3 +46,13 @@ class velocity_selector:
         for charge in charges:
             checked.append(self.monoCheck(tolerance, charge))
         return checked
+
+def main():
+    E = input('Electric Field: ')
+    B = input('Magnetic Field: ')
+    L = input('Length: ')
+    H = input('Height: ')
+    print('kys')
+    pass
+if __name__ == '__main__':
+    main()
